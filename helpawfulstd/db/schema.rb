@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 2019_09_07_192235) do
     t.integer "student_id"
     t.integer "student_own_level"
     t.integer "tutor_id"
+    t.string "language"
     t.integer "rating_for_tutor"
     t.string "comment"
     t.datetime "created_at", precision: 6, null: false
