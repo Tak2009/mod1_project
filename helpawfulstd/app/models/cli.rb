@@ -4,10 +4,10 @@ require 'tty-prompt'
     def run
         puts "Hello. Please log in or sign up"
         prompt = TTY::Prompt.new
-        choice = prompt.select("Please, select your option", ["Sing up as Student","Sing up as Tutor", "Login", "Exit"])
-        if choice == "Sing up as Student" 
+        choice = prompt.select("Please, select your option", ["Sign up as Student","Sign up as Tutor", "Login", "Exit"])
+        if choice == "Sign up as Student" 
              student_user 
-        elsif choice == "Sing up as Tuto"
+        elsif choice == "Sign up as Tutor"
              tutor_user
         elsif choice == "Login"
              login 
@@ -24,9 +24,9 @@ require 'tty-prompt'
     age = prompt.ask("your age?")
     contact_email = prompt.ask("your contact email?")
     user = Student.create(s_profile_name: s_profile_name, location: location, age: age, contact_email: contact_email)
-    puts ""
-       $state["user"] = user 
-            questions_interface
+    puts "Thank you. All done now"
+    #    $state["user"] = user 
+    #         questions_interface
     end
 
 
