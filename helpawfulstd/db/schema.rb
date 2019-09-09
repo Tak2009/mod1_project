@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 2019_09_07_192235) do
   end
 
   create_table "students", force: :cascade do |t|
-    t.string "name"
+    t.string "profile_name"
     t.string "location"
     t.integer "age"
     t.string "contact_email"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 2019_09_07_192235) do
   end
 
   create_table "tutors", force: :cascade do |t|
-    t.string "name"
+    t.string "profile_name"
     t.string "location"
     t.string "language"
     t.integer "experience"
