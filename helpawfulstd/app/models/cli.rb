@@ -70,8 +70,9 @@ class CLI
         elsif email == @student_u.contact_email && pw == @student_u.password # Login process. both ID and password must match agfainst database
             student_profile_screen
         else
-            puts "Either your email or password is incorrect. Please try again"
+            puts "Either your email or password is incorrect. Please try again" # email exits but app does not want to explicitly notify that the user has an account at this stage
             login_student
+# I should work on password reset if time allows
         end
         
     end
@@ -95,14 +96,28 @@ class CLI
 
     end
     
-    # Student R
+    # Student R  use map and filter for advanced search
     def s_serach_tutor
         puts "work in progress......zzzzz"
     end
 
     # Student W
     def s_write_review
-        puts "work in progresssssssssss......zzzzz"
+        puts "Please answer follwing questions. You can write reviews for tutors in our platform. Make sure you treat people fairly and as nice as pissbile :)"
+        prompt = TTY::Prompt.new
+        name = prompt.ask("What is your name?")
+        level = prompt.ask("What is your knowledge level with 5 being highest?")
+        email = prompt.ask("What is your tutor email? We need this for validation!") # filterling by name is too weak as there must be a lot of daves, toms for example. email is considered as unique enough
+        what_language = prompt.ask("In what language?")
+        tutor_rating = prompt.ask("Give a rating please with 5 being highest")
+        something_to_say = prompt.ask("Any comment?")
+
+        @student_u.
+
+        # need to find the tutor id as a reference to create an review instance in Review joint table.
+
+        Review.create(student_id: name, location: place, age: how_old, contact_email: email, password: pw)
+        puts "Thank you! All done!"
     end
 
 
