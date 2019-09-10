@@ -28,7 +28,7 @@ class CLI
              sleep(10)
         end 
     end 
-
+        # Student C
     def student_signup
         puts "Please provide the following information to create your profile"
         prompt = TTY::Prompt.new
@@ -66,6 +66,7 @@ class CLI
             student_profile_screen
         else
             puts "Either your email or password is incorrect. Please try again"
+            login_student
         end
         
     end
@@ -73,6 +74,41 @@ class CLI
     def student_profile_screen
         prompt = TTY::Prompt.new
         puts "Welcome back, #{@student_u.s_profile_name}!"
+        menu = prompt.select("Please, select one of your options!", ["Update Profile", "Write Review", "Search Tutor"])
+        if menu == "Update Profile"
+            s_update_profile
+        elsif menue == "Write Review"
+            s_write_review
+        else                   # Serch Tutor
+            s_search_tutor
+        end
+
+    end
+    
+    # Student U
+    def s_update_profile
+        prompt = TTY::Prompt.new
+        attr = prompt.select("What information would you lkike to update?", Student.column_names)
+        if attr == "id"
+            puts "Oops, you can not change it, please select something else"
+            s_update_profile
+        else 
+           new_info = prompt.ask("Please enter the new #{attr}")
+           @student_u.update({attr => new_info})
+        end
+            if prompt.yes?('Would youlike to update more information?')
+            s_update_profile
+            else
+            student_profile_screen
+            end
+    end
+
+    def s_write_review
+        puts "bababa"
+    end
+
+    def s_search_tutor
+        puts "papapa"
     end
         
     
