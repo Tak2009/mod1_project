@@ -5,6 +5,7 @@ class CreateStudents < ActiveRecord::Migration[6.0]
       t.string :location
       t.integer :age
       t.string :contact_email
+      t.string :password
       t.timestamps null: false
     end
   end

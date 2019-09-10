@@ -7,6 +7,7 @@ class CreateTutors < ActiveRecord::Migration[6.0]
       t.integer :experience
       t.integer :price
       t.string :contact_email
+      t.string :password
       t.timestamps null: false
     end
   end

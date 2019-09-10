@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2019_09_07_192235) do
     t.string "location"
     t.integer "age"
     t.string "contact_email"
+    t.string "password"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -39,6 +40,7 @@ ActiveRecord::Schema.define(version: 2019_09_07_192235) do
     t.integer "experience"
     t.integer "price"
     t.string "contact_email"
+    t.string "password"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
