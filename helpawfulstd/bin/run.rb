@@ -1,7 +1,7 @@
 require_relative '../config/environment'
 
-cli = CLI.new 
-cli.run
+cli = CLI.new # Need to initialize otherwise instance methods can not be used in cli.rb!!!!
+cli.run  # Telling progrramme to start from def run end in cli.rb
 
 
 # I used to have the setting below.

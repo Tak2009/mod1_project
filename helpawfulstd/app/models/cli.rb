@@ -1,10 +1,8 @@
 require_relative '../../config/environment'
 require 'tty-prompt'
 
-# do NOT use any  variable names which are used as attributes otherwise you will screw up!!!!! >>>> Undefined Class Method!!!
-# do NOT use any  variable names which are used as attributes otherwise you will screw up!!!!! >>>> Undefined Class Method!!!
-# do NOT use any  variable names which are used as attributes otherwise you will screw up!!!!! >>>> Undefined Class Method!!!
-# do NOT use any  variable names which are used as attributes otherwise you will screw up!!!!! >>>> Undefined Class Method!!!
+# Memo 1. Do NOT use any  variable names which are used as attributes otherwise you will screw up!!!!! >>>> Undefined Class Method will be triggered!!!
+# Memo 2. Remeber the reason why I set class CLI in this file!!!!!!!
 
 require 'pry'
 
@@ -32,7 +30,16 @@ class CLI
     end 
 
     def student_signup
-        puts "blablabla"
+        puts "Please provide the following information to create your profile"
+        prompt = TTY::Prompt.new
+        name = prompt.ask("What is your name?")
+        place = prompt.ask("Your city?")
+        how_old = prompt.ask("Your age?")
+        email = prompt.ask("Your email? This will be used as your login ID once your profile created")
+        pw = prompt.ask("Your password?")
+        @student_u = Student.create(s_profile_name: name, location: place, age: how_old, contact_email: email, password: pw)
+        puts "Thank you! All done!"
+        student_profile_screen
     end
 
     def login
