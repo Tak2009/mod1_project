@@ -130,8 +130,8 @@ class CLI
     def s_update_profile
         prompt = TTY::Prompt.new
         attr = prompt.select("What information would you lkike to update?", Student.column_names)
-        
-        if attr == "id"
+    binding.pry
+        if attr == "id" || "create_at" || "updated_at"
             puts "Oops, you can not change it, please select something else"
             s_update_profile
         else 
