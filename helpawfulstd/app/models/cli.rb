@@ -96,11 +96,12 @@ class CLI
            new_info = prompt.ask("Please enter the new #{attr}")
            @student_u.update({attr => new_info})
         end
-            if prompt.yes?('Would youlike to update more information?')
-            s_update_profile
-            else
+            
+        if prompt.yes?('Would youlike to update more information?')
+           s_update_profile
+        else
             student_profile_screen
-            end
+        end
     end
 
     def s_write_review
