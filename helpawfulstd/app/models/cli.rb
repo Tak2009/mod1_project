@@ -26,7 +26,7 @@ class CLI
              login 
         else 
              puts "We hope we will see you soon again!" 
-             sleep(5)
+             sleep(5)  # exit after 5 seconds
         end 
     end 
         # Student C
@@ -53,13 +53,17 @@ class CLI
         end
     end
 
+    def logout # both Student and Totor users can use this
+        puts "Goodby! See you soon!"
+        sleep(5)
+    end
+
     def login_student
         prompt = TTY::Prompt.new
         email = prompt.ask("What is your email address??")
         pw = prompt.ask("What is your password??") 
         @student_u = Student.all.find_by(contact_email: email)
 
-        
         if @student_u == nil # Student thinks he/she has the account but actually not case
             puts "We can not find your email. Please sign up" 
             student_signup
@@ -75,15 +79,18 @@ class CLI
     def student_profile_screen
         prompt = TTY::Prompt.new
         puts "Welcome back, #{@student_u.s_profile_name}!"
-        menu = prompt.select("Please, select one of your options!", ["Update Profile", "Write Review", "Search Tutor", "Delete Profile"])
+        menu = prompt.select("Please, select one of your options!", ["Update Profile", "Write Review", "Search Tutor", "Delete Profile","Log out"])
+        
         if menu == "Update Profile"
             s_update_profile
         elsif menu == "Write Review"
             s_write_review
         elsif menu == "Search Tutor"                  
             s_search_tutor
-        else 
+        elsif
             s_delete_profile
+        else
+            logout
         end
 
     end
@@ -92,6 +99,7 @@ class CLI
     def s_update_profile
         prompt = TTY::Prompt.new
         attr = prompt.select("What information would you lkike to update?", Student.column_names)
+        
         if attr == "id"
             puts "Oops, you can not change it, please select something else"
             s_update_profile
@@ -110,6 +118,7 @@ class CLI
     # Student D
     def s_delete_profile
         prompt = TTY::Prompt.new
+        
         if prompt.yes?("Are you sure you would like to delete to your profile?, This will also delete all of your reviews you made in the past")
            @student_u.reviews.destroy_all # destory reviews(instances in Reviews written by the user) first otherwise we can not find the reviews by the user id. hard delete
            @student_u.destroy
