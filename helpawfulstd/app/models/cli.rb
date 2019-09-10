@@ -87,7 +87,7 @@ class CLI
             s_write_review
         elsif menu == "Search Tutor"                  
             s_search_tutor
-        elsif
+        elsif menu == "Delete Profile"
             s_delete_profile
         else
             logout
@@ -95,6 +95,17 @@ class CLI
 
     end
     
+    # Student R
+    def s_serach_tutor
+        puts "work in progress......zzzzz"
+    end
+
+    # Student W
+    def s_write_review
+        puts "work in progresssssssssss......zzzzz"
+    end
+
+
     # Student U
     def s_update_profile
         prompt = TTY::Prompt.new
@@ -124,10 +135,14 @@ class CLI
            @student_u.destroy
            puts "Thank you for being a great student here! Hope to see you soon again!!"
            sleep(5)
+           exit
         else
            student_profile_screen
         end
     end
+
+
+
     # end
 
     # def s_write_review
