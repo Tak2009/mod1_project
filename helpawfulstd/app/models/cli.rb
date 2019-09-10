@@ -4,6 +4,7 @@ require 'tty-prompt'
 # Memo 1. Do NOT use any  variable names which are used as attributes otherwise you will screw up!!!!! >>>> Undefined Class Method will be triggered!!!
 # Memo 2. Remeber the reason why I set class CLI in this file!!!!!!!
 
+
 require 'pry'
 
 class CLI
@@ -25,7 +26,7 @@ class CLI
              login 
         else 
              puts "We hope we will see you soon again!" 
-             sleep(10)
+             sleep(5)
         end 
     end 
         # Student C
@@ -74,13 +75,15 @@ class CLI
     def student_profile_screen
         prompt = TTY::Prompt.new
         puts "Welcome back, #{@student_u.s_profile_name}!"
-        menu = prompt.select("Please, select one of your options!", ["Update Profile", "Write Review", "Search Tutor"])
+        menu = prompt.select("Please, select one of your options!", ["Update Profile", "Write Review", "Search Tutor", "Delete Profile"])
         if menu == "Update Profile"
             s_update_profile
-        elsif menue == "Write Review"
+        elsif menu == "Write Review"
             s_write_review
-        else                   # Serch Tutor
+        elsif menu == "Search Tutor"                  
             s_search_tutor
+        else 
+            s_delete_profile
         end
 
     end
@@ -97,20 +100,34 @@ class CLI
            @student_u.update({attr => new_info})
         end
             
-        if prompt.yes?('Would youlike to update more information?')
+        if prompt.yes?('Would you like to update more information?')
            s_update_profile
         else
             student_profile_screen
         end
     end
 
-    def s_write_review
-        puts "bababa"
+    # Student D
+    def s_delete_profile
+        prompt = TTY::Prompt.new
+        if prompt.yes?("Are you sure you would like to delete to your profile?, This will also delete all of your reviews you made in the past")
+           @student_u.reviews.destroy_all # destory reviews(instances in Reviews written by the user) first otherwise we can not find the reviews by the user id. hard delete
+           @student_u.destroy
+           puts "Thank you for being a great student here! Hope to see you soon again!!"
+           sleep(5)
+        else
+           student_profile_screen
+        end
     end
+    # end
 
-    def s_search_tutor
-        puts "papapa"
-    end
+    # def s_write_review
+    #     puts "bababa"
+    # end
+
+    # def s_search_tutor
+    #     puts "papapa"
+    # end
         
     
 
