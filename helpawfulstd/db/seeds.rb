@@ -19,6 +19,8 @@ t7 = Tutor.create(t_profile_name: "Ryan", location: "Dublin", language: "C++", e
 t8 = Tutor.create(t_profile_name: "Daniel", location: "Liverpool", language: "PHP", experience: 3, price: 55, contact_email: "14@gmail.com", password: "a")
 t9 = Tutor.create(t_profile_name: "Erisa", location: "Swansea", language: "JavaScript", experience: 4, price: 120, contact_email: "15@gmail.com", password: "a")
 t10 = Tutor.create(t_profile_name: "Erisa", location: "Swansea", language: "Ruby", experience: 5, price: 150, contact_email: "15@gmail.com", password: "a")
+t11 = Tutor.create(t_profile_name: "Tac", location: "Swansea", language: "Ruby", experience: 5, price: 150, contact_email: "17@gmail.com", password: "a")
+t12 = Tutor.create(t_profile_name: "Mac", location: "Swansea", language: "Ruby", experience: 5, price: 150, contact_email: "19@gmail.com", password: "a")
 
 r1 = Review.create(student_id: s1.id, student_own_level: 3, tutor_id: t4.id, language: "Ruby", rating_for_tutor: 5, comment: "good in general")
 r2 = Review.create(student_id: s2.id, student_own_level: 3, tutor_id: t5.id, language: "C#", rating_for_tutor: 1, comment: "aaaa")
@@ -31,3 +33,5 @@ r8 = Review.create(student_id: s2.id, student_own_level: 2, tutor_id: t3.id, lan
 r9 = Review.create(student_id: s7.id, student_own_level: 1, tutor_id: t2.id, language: "JavaScript", rating_for_tutor: 1, comment: "sfCSkncal")
 r10 = Review.create(student_id: s7.id, student_own_level: 1, tutor_id: t1.id, language: "PHP", rating_for_tutor: 1, comment: "fCin general")
 r11 = Review.create(student_id: s7.id, student_own_level: 1, tutor_id: t1.id, language: "PHP", rating_for_tutor: 1, comment: "gxbls; zcnl")
+r12 = Review.create(student_id: s3.id, student_own_level: 3, tutor_id: t11.id, language: "Ruby", rating_for_tutor: 2, comment: "fvsveneral")
+r13 = Review.create(student_id: s3.id, student_own_level: 3, tutor_id: t12.id, language: "Ruby", rating_for_tutor: 2, comment: "fbbdeneral")

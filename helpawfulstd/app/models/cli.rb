@@ -58,7 +58,8 @@ class CLI
     # For both Student and Tutor users
     def logout 
         puts "Goodby! See you soon!"
-        sleep(5)
+        sleep(2)
+        go_to_exit
     end
     
     # Student
@@ -103,8 +104,25 @@ class CLI
     end
     
     # Student R  use map and filter for advanced search
-    def s_serach_tutor
-        puts "work in progress......zzzzz"
+    def s_search_tutor
+        puts "Let me help you search an good tutor near you!"
+        prompt = TTY::Prompt.new
+        
+        what_language = prompt.ask("In what language are you looking?")
+        tutor_rating = prompt.ask("Minimum tutor rating?")
+        puts "we need more information!"
+        place = prompt.ask("In which area, are you looking?") 
+        experieced_or_not = prompt.ask("Select experience level with 5 being highest plase.")
+        "Ok, thank you! hold on a sec pllease, We are serching for you!"
+
+        Review.all.where(language: what_language).where("rating_for_tutor > #{tutor_rating}")# .where(location: place)
+     binding.pry
+        puts "check"
+
+        sleep(5)
+        
+         
+
     end
 
     # Student W
@@ -130,8 +148,8 @@ class CLI
     def s_update_profile
         prompt = TTY::Prompt.new
         attr = prompt.select("What information would you lkike to update?", Student.column_names)
-    binding.pry
-        if attr == "id" || "create_at" || "updated_at"
+    # binding.pry
+        if attr == "id" || attr == "created_at" || attr == "updated_at"
             puts "Oops, you can not change it, please select something else"
             s_update_profile
         else 
@@ -154,10 +172,15 @@ class CLI
            @student_u.reviews.destroy_all # destory reviews(instances in Reviews written by the user) first otherwise we can not find the reviews by the user id. hard delete
            @student_u.destroy
            puts "Thank you for being a great student here! Hope to see you soon again!!"
-           sleep(5)
+           sleep(2)
            exit
+ # ask moni tomorrow # go_to_exit can not be used as there is no instance after the instance destroied.
         else
            student_profile_screen
+        end
+
+        def go_to_exit
+            puts "Byebye"
         end
     end
 
