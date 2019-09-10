@@ -43,6 +43,7 @@ class CLI
         student_profile_screen
     end
 
+    # Both Student and Tutor Users
     def login
         prompt = TTY::Prompt.new
         type = prompt.select("Please, select ", ["Login as Tutor?", "Login as Student?"])
@@ -53,11 +54,14 @@ class CLI
         end
     end
 
-    def logout # both Student and Totor users can use this
+     
+    # For both Student and Tutor users
+    def logout 
         puts "Goodby! See you soon!"
         sleep(5)
     end
-
+    
+    # Student
     def login_student
         prompt = TTY::Prompt.new
         email = prompt.ask("What is your email address??")
@@ -77,6 +81,8 @@ class CLI
         
     end
 
+
+    # Student Main screen
     def student_profile_screen
         prompt = TTY::Prompt.new
         puts "Welcome back, #{@student_u.s_profile_name}!"
@@ -105,19 +111,18 @@ class CLI
     def s_write_review
         puts "Please answer follwing questions. You can write reviews for tutors in our platform. Make sure you treat people fairly and as nice as pissbile :)"
         prompt = TTY::Prompt.new
-        name = prompt.ask("What is your name?")
         level = prompt.ask("What is your knowledge level with 5 being highest?")
         email = prompt.ask("What is your tutor email? We need this for validation!") # filterling by name is too weak as there must be a lot of daves, toms for example. email is considered as unique enough
         what_language = prompt.ask("In what language?")
         tutor_rating = prompt.ask("Give a rating please with 5 being highest")
         something_to_say = prompt.ask("Any comment?")
 
-        @student_u.
+        t_id_by_email = Tutor.all.find_by(contact_email: email) # get the referece for the tutor
 
-        # need to find the tutor id as a reference to create an review instance in Review joint table.
-
-        Review.create(student_id: name, location: place, age: how_old, contact_email: email, password: pw)
-        puts "Thank you! All done!"
+        Review.create(student_id: @student_u.id, student_own_level: level, tutor_id: t_id_by_email.id, language: what_language, rating_for_tutor: tutor_rating, comment: something_to_say)
+        puts "Thank youfor your review. We always appreciate your feedback!!"
+        
+        student_profile_screen
     end
 
 
