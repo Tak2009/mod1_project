@@ -141,18 +141,17 @@ class CLI
 
         puts "Let me help you search a good tutor near you!"
         prompt = TTY::Prompt.new
-        
         what_language = prompt.ask("In what language are you looking?") # 1 from Review table
         tutor_rating = prompt.ask("Minimum tutor rating?") # 2 from Review table
         puts "we need more information!"
         place = prompt.ask("In which area, are you looking?") # 3 from Tutor table
         experieced_or_not = prompt.ask("Select minimum experience level with 5 being highest plase.") # 4 from Tutor table
+        
         puts "Ok, thank you! hold on a sec pllease, We are serching for you!"
-        # narrow down with #1 and #2
-        reviews_array = Review.all.where(language: what_language).where("rating_for_tutor >= #{tutor_rating}")
+        
+        reviews_array = Review.all.where(language: what_language).where("rating_for_tutor >= #{tutor_rating}") # narrow down with #1 and #2
         tutor_id_only_array = reviews_array.map{|tutor_with_conditions| tutor_with_conditions.tutor_id}.uniq # reviews contains multiple reviews for 1 specific tutor user
-        # need to sort with #3 and #4 by using Tutor table
-        tutor_list_with_conditions = Tutor.all.where(id: tutor_id_only_array).where(location: place).where("experience >= #{experieced_or_not}")
+        tutor_list_with_conditions = Tutor.all.where(id: tutor_id_only_array).where(location: place).where("experience >= #{experieced_or_not}") # need to sort with #3 and #4 by using Tutor table
      
         if tutor_list_with_conditions.length == 0
             puts "No match :("
@@ -196,12 +195,8 @@ class CLI
         attr_to_change = prompt.select("What information would you lkike to update?", selection_excluding_system_generated)
         new_info = prompt.ask("Please enter the new #{attr_to_change}")
         @student_u.update({attr_to_change => new_info})
-        
-        if prompt.yes?('Would you like to update more information?')
-            s_update_profile
-        else
-            student_profile_screen
-        end
+        puts "Updated!"
+        student_profile_screen
     end
 
     # Student D
@@ -316,26 +311,23 @@ class CLI
         place = prompt.ask("In which area, are you looking, tutor?") # 3 from Student table
         
         puts "Ok, tutor! Hold on a sec pllease, We are serching for you!"
-        # narrow down with #1 and #2 and language(self)
-        reviews_array = Review.all.where(language: @tutor_u.language).where("student_own_level >= #{difficult_to_teach}").where("rating_for_tutor >= #{tutor_rating}") # totor's own language auto-set with self attribute for filtering
+        
+        reviews_array = Review.all.where(language: @tutor_u.language).where("student_own_level >= #{difficult_to_teach}").where("rating_for_tutor >= #{tutor_rating}") # narrow down with #1 and #2 and language(self). totor's own language auto-set with self attribute for filtering
         student_id_only_array = reviews_array.map{|student_with_conditions| student_with_conditions.student_id}.uniq # students can have many reviews for 1 specific tutor user
-        # need to sort with #3 in Student table
-    binding.pry    
-        student_list_with_conditions = Student.all.where(id: student_id_only_array).where(location: place)
+    # binding.pry    
+        student_list_with_conditions = Student.all.where(id: student_id_only_array).where(location: place) # need to sort with #3 in Student table
      
         if student_list_with_conditions.length == 0
             puts "No match :("
 
         else
             puts "Here is the result!"
-            student_list_with_conditions
-
+            puts student_list_with_conditions.map {|t| {:name => t.s_profile_name, :location => t.location, :age => t.age, :language => t.wanna_learn, :email => t.contact_email}}
             # student_list_with_conditions.each do |element_hash| p element_hash end
-            
         end
 
         if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
-            t_search_tutor
+            t_search_student
         else
             tutor_profile_screen
         end
@@ -349,12 +341,8 @@ class CLI
         attr_to_change = prompt.select("What information would you lkike to update, tutor?", selection_excluding_system_generated)
         new_info = prompt.ask("Please enter the new #{attr_to_change}")
         @tutor_u.update({attr_to_change => new_info})
-        
-        if prompt.yes?('Would you like to update more information, tutor?')
-            t_update_profile
-        else
-            tutor_profile_screen
-        end
+        puts "Updated!"
+        tutor_profile_screen
     end
 
 
