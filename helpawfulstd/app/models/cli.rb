@@ -21,7 +21,7 @@ class CLI
         if choice == "Sign up as Student" 
              student_signup
         elsif choice == "Sign up as Tutor"
-             tutor_user
+             tutor_signup
         elsif choice == "Login"
              login 
         else 
@@ -29,7 +29,9 @@ class CLI
              
         end 
     end 
-        # Student C
+# ======================= From here, For Student User Type=====================================================================================
+
+    # Student C
     def student_signup
         puts "Please provide the following information to create your profile"
         prompt = TTY::Prompt.new
@@ -55,14 +57,13 @@ class CLI
         end
     end
 
-     
     # For both Student and Tutor users
     def logout 
         puts "Goodby! See you soon!"
 
     end
     
-    # Student
+    # Student Login
 # I should work on password reset if time allows
     def login_student
         prompt = TTY::Prompt.new
@@ -83,7 +84,6 @@ class CLI
         
     end
 
-
     # Student Main screen
     def student_profile_screen
         prompt = TTY::Prompt.new
@@ -101,7 +101,6 @@ class CLI
         else
             logout
         end
-
     end
     
     # Student R very simple looking into Tutor table. This search is NOT Review dependant
@@ -126,7 +125,7 @@ class CLI
     end
 
 
-    # Student R use map and filter for advanced search based on Reviews
+    # Student R using map and filter for advanced search based on Reviews
 # data input validation NOT implemented at all. Need  to work on if time allows
     def s_advanced_search_tutor
 
@@ -159,8 +158,6 @@ class CLI
         else
             student_profile_screen
         end
-# data input validation NOT implemented at all. Need  to work on if time allows
-
     end
 
     # Student W
@@ -215,11 +212,46 @@ class CLI
         else
            student_profile_screen
         end
+    end
+   
+     # ======================= From here, For Tutor User Type=====================================================================================
+     
+     # Totor C 
+     def tutor_signup
+        puts "Please provide the following information to create your profile"
+        prompt = TTY::Prompt.new
+        name = prompt.ask("Your profile name?")
+        place = prompt.ask("Your city?")
+        language_your_speciality = prompt.ask("Which language you can teach?")
+        email = prompt.ask("Your email? This will be used as your login ID once your profile created")
+        pw = prompt.ask("Your password?")
+        @tutor_u = Tutor.create(s_profile_name: name, location: place, age: how_old, wanna_learn: which_language, contact_email: email, password: pw)
+        puts "Thank you! All done!"
+        tutor_profile_screen
+     end
+
+     # Tutor Main screen
+    def tutor_profile_screen
+        prompt = TTY::Prompt.new
+        puts "Welcome back, #{@tutor_u.s_profile_name}!"
+        menu = prompt.select("Please, select one of your options!", ["Update Profile", "Search Tutor", "Delete Profile","Log out"])
+        
+        if menu == "Update Profile"
+            t_update_profile
+        elsif menu == "Search Tutor"                  
+            t_search_tutor
+        elsif menu == "Delete Profile"
+            t_delete_profile
+        else
+            logout
+        end
+    end
+
 
         # def go_to_exit
         #     puts "Byebye"
         # end
-    end
+    
 
 
 
