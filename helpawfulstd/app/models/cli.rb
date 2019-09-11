@@ -32,7 +32,7 @@ class CLI
 # ======================= From here, For Student User Type=====================================================================================
 
     # Student C
-# No validation for email yet
+# No validation applied on email so that no duplicate email registered in the database. Need to woerk on iuf time allows
     def student_signup
         puts "Please provide the following information to create your profile"
         prompt = TTY::Prompt.new
@@ -208,19 +208,20 @@ class CLI
     def s_delete_profile
         prompt = TTY::Prompt.new
         
-        if prompt.yes?("Are you sure you would like to delete to your profile?, This will also delete all of your reviews you made in the past")
+        if prompt.no?("Are you sure you would like to delete to your profile?, This will also delete all of your reviews you made in the past")
+            puts "glad to hear!"
+            student_profile_screen
+        else
            @student_u.reviews.destroy_all # destory reviews(instances in Reviews written by the user) first otherwise we can not find the reviews by the user id. hard delete
            @student_u.destroy
            puts "Thank you for being a great student here! Hope to see you soon again!!"
-        else
-           puts "error" # once the profile deleted, there is no instance exsting and nothing happends
         end
-    end
+      end
     
 # ======================= From here, For Tutor User Type=====================================================================================
      
      # Totor C 
-# no validation applied on email. need to woerk on iuf time allows
+# No validation applied on email so that no duplicate email registered in the database. Need to woerk on iuf time allows
      def tutor_signup
         puts "Please provide the following information to create your profile, tutor"
         prompt = TTY::Prompt.new
@@ -332,6 +333,35 @@ class CLI
             t_search_tutor
         else
             tutor_profile_screen
+        end
+    end
+
+    
+    # Tutor U
+    def t_update_profile
+        prompt = TTY::Prompt.new
+        selection_excluding_system_generated = Student.column_names.select{|attr| attr != "id" && attr != "created_at" && attr != "updated_at"} 
+        attr = prompt.select("What information would you lkike to update?", selection_excluding_system_generated)
+        new_info = prompt.ask("Please enter the new #{attr}")
+        @student_u.update({attr => new_info})
+        
+        if prompt.yes?('Would you like to update more information?')
+            s_update_profile
+        else
+            student_profile_screen
+        end
+    end
+
+
+    # Tutor D
+    def t_delete_profile
+        prompt = TTY::Prompt.new
+        if prompt.no?("Are you sure you would like to delete to your profile?") # in my app, only Student Users can write reviews
+            puts "glad to hear that you wanna stay here!"
+            tutor_profile_screen
+        else
+        @tutor_u.destroy
+        puts "Thank you for being a great student here! Hope to see you soon again!!"
         end
     end
 
