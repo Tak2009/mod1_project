@@ -4,6 +4,7 @@ class CreateStudents < ActiveRecord::Migration[6.0]
       t.string :s_profile_name
       t.string :location
       t.integer :age
+      t.string :wanna_learn
       t.string :contact_email
       t.string :password
       t.timestamps null: false

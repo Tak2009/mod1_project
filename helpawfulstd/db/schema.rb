@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2019_09_07_192235) do
     t.string "s_profile_name"
     t.string "location"
     t.integer "age"
+    t.string "wanna_learn"
     t.string "contact_email"
     t.string "password"
     t.datetime "created_at", precision: 6, null: false

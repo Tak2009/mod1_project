@@ -26,7 +26,7 @@ class CLI
              login 
         else 
              puts "We hope we will see you soon again!" 
-             sleep(5)  # exit after 5 seconds
+             
         end 
     end 
         # Student C
@@ -36,9 +36,10 @@ class CLI
         name = prompt.ask("What is your name?")
         place = prompt.ask("Your city?")
         how_old = prompt.ask("Your age?")
+        which_language = prompt.ask("Which language you wanna learn?")
         email = prompt.ask("Your email? This will be used as your login ID once your profile created")
         pw = prompt.ask("Your password?")
-        @student_u = Student.create(s_profile_name: name, location: place, age: how_old, contact_email: email, password: pw)
+        @student_u = Student.create(s_profile_name: name, location: place, age: how_old, wanna_learn: which_language, contact_email: email, password: pw)
         puts "Thank you! All done!"
         student_profile_screen
     end
@@ -58,10 +59,11 @@ class CLI
     # For both Student and Tutor users
     def logout 
         puts "Goodby! See you soon!"
-        
+
     end
     
     # Student
+# I should work on password reset if time allows
     def login_student
         prompt = TTY::Prompt.new
         email = prompt.ask("What is your email address??")
@@ -76,7 +78,7 @@ class CLI
         else
             puts "Either your email or password is incorrect. Please try again" # email exits but app does not want to explicitly notify that the user has an account at this stage
             login_student
-# I should work on password reset if time allows
+
         end
         
     end
@@ -102,8 +104,32 @@ class CLI
 
     end
     
-    # Student R  use map and filter for advanced search based on Reviews
+    # Student R very simple looking into Tutor table. This search is NOT Review dependant
+# data input validation NOT implemented at all. Need  to work on if time allows
     def s_search_tutor
+
+        prompt = TTY::Prompt.new
+        menu = prompt.select("Which serach would you fancy?", ["Simple(search by location and language you wanna learn)", "Advanced(based on rerviews)"])
+        if menu == "Advanced"
+            s_advanced_search_tutor
+        else
+            place = prompt.ask("Enter your location or anywhere you wanna check!")
+            which_language = prompt.ask("Which language you wanna learn?")
+            puts "here you go!"
+            Tutor.all.where(location: place).where(language: which_language).each do |element_hash| p element_hash end
+            if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
+                s_search_tutor
+            else
+                student_profile_screen
+            end
+        end
+    end
+
+
+    # Student R use map and filter for advanced search based on Reviews
+# data input validation NOT implemented at all. Need  to work on if time allows
+    def s_advanced_search_tutor
+
         puts "Let me help you search a good tutor near you!"
         prompt = TTY::Prompt.new
         
@@ -114,16 +140,27 @@ class CLI
         experieced_or_not = prompt.ask("Select minimum experience level with 5 being highest plase.") # 4 from Tutor table
         "Ok, thank you! hold on a sec pllease, We are serching for you!"
         # narrow down with #1 and #2
-        reviews_array = Review.all.where(language: what_language).where("rating_for_tutor > #{tutor_rating}")
-        tutor_id_only_array = reviews_array.map{|tutor_with_conditions| tutor_with_conditions.tutor_id}
+        reviews_array = Review.all.where(language: what_language).where("rating_for_tutor >= #{tutor_rating}")
+        tutor_id_only_array = reviews_array.map{|tutor_with_conditions| tutor_with_conditions.tutor_id}.uniq # reviews contains multiple reviews for 1 specific tutor user
         # need to sort with #3 and #4 by using Tutor table
-        tutor_list_with_conditions = Tutor.all.where(id: tutor_id_only_array).where(location: place).where("experience > #{experieced_or_not}")
-     # binding.pry
+        tutor_list_with_conditions = Tutor.all.where(id: tutor_id_only_array).where(location: place).where("experience >= #{experieced_or_not}")
+     
         if tutor_list_with_conditions.length == 0
-            puts "No match. Please try again :("
+            puts "No match :("
+
         else
-            Tutor.all.where(id: tutor_id_only_array).where(location: place).where("experience > #{experieced_or_not}")
+            puts "Here is the result!"
+            tutor_list_with_conditions.each do |element_hash| p element_hash end
+            
         end
+
+        if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
+            s_search_tutor
+        else
+            student_profile_screen
+        end
+# data input validation NOT implemented at all. Need  to work on if time allows
+
     end
 
     # Student W
@@ -174,30 +211,17 @@ class CLI
            @student_u.destroy
            puts "Thank you for being a great student here! Hope to see you soon again!!"
                     
- # ask moni tomorrow 
- # go_to_exit can not be used as there is no instance after the instance destroied.
+ 
         else
            student_profile_screen
         end
 
-        def go_to_exit
-            puts "Byebye"
-        end
+        # def go_to_exit
+        #     puts "Byebye"
+        # end
     end
 
 
-
-    # end
-
-    # def s_write_review
-    #     puts "bababa"
-    # end
-
-    # def s_search_tutor
-    #     puts "papapa"
-    # end
-        
-    
 
     
 

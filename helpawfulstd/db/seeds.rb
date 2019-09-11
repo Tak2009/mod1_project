@@ -1,13 +1,13 @@
 require_relative "../app/models/student.rb"
 
-s1 = Student.create(s_profile_name: "Takeshi", location: "London", age:20, contact_email: "1@gmail.com", password: "a")
-s2 = Student.create(s_profile_name: "Dave", location: "Manchester", age:30, contact_email: "2@gmail.com", password: "a")
-s3 = Student.create(s_profile_name: "Dan", location: "Leeds", age:40, contact_email: "3@gmail.com", password: "a")
-s4 = Student.create(s_profile_name: "Tom", location: "London", age:50, contact_email: "4@gmail.com", password: "a")
-s5 = Student.create(s_profile_name: "Tony", location: "Dublin", age:60, contact_email: "5@gmail.com", password: "a")
-s6 = Student.create(s_profile_name: "Naomi", location: "London", age:34, contact_email: "6@gmail.com", password: "a")
-s7 = Student.create(s_profile_name: "Henry", location: "Liverpool", age:40, contact_email: "7@gmail.com", password: "a")
-s8 = Student.create(s_profile_name: "Aya", location: "Oxford", age:15, contact_email: "8@gmail.com", password: "a")
+s1 = Student.create(s_profile_name: "Takeshi", location: "London", age:20, wanna_learn: "Ruby", contact_email: "1@gmail.com", password: "a")
+s2 = Student.create(s_profile_name: "Dave", location: "Manchester", age:30, wanna_learn: "Ruby", contact_email: "2@gmail.com", password: "a")
+s3 = Student.create(s_profile_name: "Dan", location: "Leeds", age:40, wanna_learn: "Ruby", contact_email: "3@gmail.com", password: "a")
+s4 = Student.create(s_profile_name: "Tom", location: "London", age:50, wanna_learn: "Ruby", contact_email: "4@gmail.com", password: "a")
+s5 = Student.create(s_profile_name: "Tony", location: "Dublin", age:60, wanna_learn: "Ruby", contact_email: "5@gmail.com", password: "a")
+s6 = Student.create(s_profile_name: "Naomi", location: "London", age:34, wanna_learn: "Ruby", contact_email: "6@gmail.com", password: "a")
+s7 = Student.create(s_profile_name: "Henry", location: "Liverpool", age:40, wanna_learn: "Ruby", contact_email: "7@gmail.com", password: "a")
+s8 = Student.create(s_profile_name: "Aya", location: "Oxford", age:15, wanna_learn: "Ruby", contact_email: "8@gmail.com", password: "a")
 
 t1 = Tutor.create(t_profile_name: "David", location: "London", language: "PHP", experience: 5, price: 100, contact_email: "9@gmail.com", password: "a")
 t2 = Tutor.create(t_profile_name: "David", location: "London", language: "JavaScript", experience: 5, price: 100, contact_email: "9@gmail.com", password: "a")
