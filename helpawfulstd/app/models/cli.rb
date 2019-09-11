@@ -58,8 +58,7 @@ class CLI
     # For both Student and Tutor users
     def logout 
         puts "Goodby! See you soon!"
-        sleep(2)
-        go_to_exit
+        
     end
     
     # Student
@@ -103,26 +102,28 @@ class CLI
 
     end
     
-    # Student R  use map and filter for advanced search
+    # Student R  use map and filter for advanced search based on Reviews
     def s_search_tutor
-        puts "Let me help you search an good tutor near you!"
+        puts "Let me help you search a good tutor near you!"
         prompt = TTY::Prompt.new
         
-        what_language = prompt.ask("In what language are you looking?")
-        tutor_rating = prompt.ask("Minimum tutor rating?")
+        what_language = prompt.ask("In what language are you looking?") # 1 from Review table
+        tutor_rating = prompt.ask("Minimum tutor rating?") # 2 from Review table
         puts "we need more information!"
-        place = prompt.ask("In which area, are you looking?") 
-        experieced_or_not = prompt.ask("Select experience level with 5 being highest plase.")
+        place = prompt.ask("In which area, are you looking?") # 3 from Tutor table
+        experieced_or_not = prompt.ask("Select minimum experience level with 5 being highest plase.") # 4 from Tutor table
         "Ok, thank you! hold on a sec pllease, We are serching for you!"
-
-        Review.all.where(language: what_language).where("rating_for_tutor > #{tutor_rating}")# .where(location: place)
-     binding.pry
-        puts "check"
-
-        sleep(5)
-        
-         
-
+        # narrow down with #1 and #2
+        reviews_array = Review.all.where(language: what_language).where("rating_for_tutor > #{tutor_rating}")
+        tutor_id_only_array = reviews_array.map{|tutor_with_conditions| tutor_with_conditions.tutor_id}
+        # need to sort with #3 and #4 by using Tutor table
+        tutor_list_with_conditions = Tutor.all.where(id: tutor_id_only_array).where(location: place).where("experience > #{experieced_or_not}")
+     # binding.pry
+        if tutor_list_with_conditions.length == 0
+            puts "No match. Please try again :("
+        else
+            Tutor.all.where(id: tutor_id_only_array).where(location: place).where("experience > #{experieced_or_not}")
+        end
     end
 
     # Student W
@@ -172,9 +173,9 @@ class CLI
            @student_u.reviews.destroy_all # destory reviews(instances in Reviews written by the user) first otherwise we can not find the reviews by the user id. hard delete
            @student_u.destroy
            puts "Thank you for being a great student here! Hope to see you soon again!!"
-           sleep(2)
-           exit
- # ask moni tomorrow # go_to_exit can not be used as there is no instance after the instance destroied.
+                    
+ # ask moni tomorrow 
+ # go_to_exit can not be used as there is no instance after the instance destroied.
         else
            student_profile_screen
         end
