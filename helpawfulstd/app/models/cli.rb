@@ -121,7 +121,7 @@ class CLI
                     
                 else
                     puts "here you go!"
-                    search_result_t.map{|t| {:name => t.t_profile_name, :locartion => t.location, :language => t.language, :experience => t.experience, :hourly_rate => t.price, :email => t.contact_email}}
+                    puts search_result_t.map{|t| {:name => t.t_profile_name, :locartion => t.location, :language => t.language, :experience => t.experience, :hourly_rate => t.price, :email => t.contact_email}}
                     # search_result_t.each do |element_hash| p element_hash end  ==> this returns unnecessary information
                 end  
         end
@@ -156,11 +156,10 @@ class CLI
      
         if tutor_list_with_conditions.length == 0
             puts "No match :("
-
         else
             puts "Here is the result!"
-            tutor_list_with_conditions.each do |element_hash| p element_hash end
-            
+            puts tutor_list_with_conditions.map {|t| {:name => t.t_profile_name, :locartion => t.location, :language => t.language, :experience => t.experience, :hourly_rate => t.price, :email => t.contact_email}}
+            # tutor_list_with_conditions.each do |element_hash| p element_hash end
         end
 
         if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
@@ -213,10 +212,8 @@ class CLI
            @student_u.reviews.destroy_all # destory reviews(instances in Reviews written by the user) first otherwise we can not find the reviews by the user id. hard delete
            @student_u.destroy
            puts "Thank you for being a great student here! Hope to see you soon again!!"
-                    
- 
         else
-           student_profile_screen
+           puts "error" # once the profile deleted, there is no instance exsting and nothing happends
         end
     end
     
