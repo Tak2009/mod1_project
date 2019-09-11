@@ -193,9 +193,9 @@ class CLI
     def s_update_profile
         prompt = TTY::Prompt.new
         selection_excluding_system_generated = Student.column_names.select{|attr| attr != "id" && attr != "created_at" && attr != "updated_at"} 
-        attr = prompt.select("What information would you lkike to update?", selection_excluding_system_generated)
-        new_info = prompt.ask("Please enter the new #{attr}")
-        @student_u.update({attr => new_info})
+        attr_to_change = prompt.select("What information would you lkike to update?", selection_excluding_system_generated)
+        new_info = prompt.ask("Please enter the new #{attr_to_change}")
+        @student_u.update({attr_to_change => new_info})
         
         if prompt.yes?('Would you like to update more information?')
             s_update_profile
@@ -285,14 +285,16 @@ class CLI
         else
             place = prompt.ask("Enter your location or anywhere you wanna check, tutor!")
             language_to_teach = prompt.ask("Which language?")
-            serach_result = Student.all.where(location: place).where(wanna_learn: language_to_teach)
     # binding.pry
-               if serach_result.length == 0
+            search_result = Student.all.where(location: place).where(wanna_learn: language_to_teach)
+    # binding.pry
+               if search_result.length == 0
                   puts "No match, tutor... :("
                   t_search_student
                else
                   puts "here you go!"
-                  serach_result.each do |element_hash| p element_hash end  # need t think of better user profile structure for tutor
+                  puts search_result.map {|t| {:name => t.s_profile_name, :location => t.location, :age => t.age, :language => t.wanna_learn, :email => t.contact_email}}
+                  # serach_result.each do |element_hash| p element_hash end  # need t think of better user profile structure for tutor
                end
         end
 
@@ -311,13 +313,14 @@ class CLI
         tutor_rating = prompt.ask("Tutor, please select minimum tutor rating from student? Am sure you wanna find an easygoing student!") # 1 from Review table
         difficult_to_teach = prompt.ask("Lower is more beginner. With 5(advanced student) being highest. If you wanna avoid beginners, enter a higher number") # 2 from Review table
         puts "We need more information, tutor!"
-        place = prompt.ask("In which area, are you looking, tutor?") # 3 Student table
+        place = prompt.ask("In which area, are you looking, tutor?") # 3 from Student table
         
         puts "Ok, tutor! Hold on a sec pllease, We are serching for you!"
         # narrow down with #1 and #2 and language(self)
-        reviews_array = Review.all.where(language: @tutor_u.language).where("student_own_level >= #{difficult_to_teach}").where("rating_for_tutor >= #{tutor_rating}")
+        reviews_array = Review.all.where(language: @tutor_u.language).where("student_own_level >= #{difficult_to_teach}").where("rating_for_tutor >= #{tutor_rating}") # totor's own language auto-set with self attribute for filtering
         student_id_only_array = reviews_array.map{|student_with_conditions| student_with_conditions.student_id}.uniq # students can have many reviews for 1 specific tutor user
         # need to sort with #3 in Student table
+    binding.pry    
         student_list_with_conditions = Student.all.where(id: student_id_only_array).where(location: place)
      
         if student_list_with_conditions.length == 0
@@ -325,7 +328,9 @@ class CLI
 
         else
             puts "Here is the result!"
-            student_list_with_conditions.each do |element_hash| p element_hash end
+            student_list_with_conditions
+
+            # student_list_with_conditions.each do |element_hash| p element_hash end
             
         end
 
@@ -340,15 +345,15 @@ class CLI
     # Tutor U
     def t_update_profile
         prompt = TTY::Prompt.new
-        selection_excluding_system_generated = Student.column_names.select{|attr| attr != "id" && attr != "created_at" && attr != "updated_at"} 
-        attr = prompt.select("What information would you lkike to update?", selection_excluding_system_generated)
-        new_info = prompt.ask("Please enter the new #{attr}")
-        @student_u.update({attr => new_info})
+        selection_excluding_system_generated = Tutor.column_names.select{|attr| attr != "id" && attr != "created_at" && attr != "updated_at"} 
+        attr_to_change = prompt.select("What information would you lkike to update, tutor?", selection_excluding_system_generated)
+        new_info = prompt.ask("Please enter the new #{attr_to_change}")
+        @tutor_u.update({attr_to_change => new_info})
         
-        if prompt.yes?('Would you like to update more information?')
-            s_update_profile
+        if prompt.yes?('Would you like to update more information, tutor?')
+            t_update_profile
         else
-            student_profile_screen
+            tutor_profile_screen
         end
     end
 
@@ -356,7 +361,7 @@ class CLI
     # Tutor D
     def t_delete_profile
         prompt = TTY::Prompt.new
-        if prompt.no?("Are you sure you would like to delete to your profile?") # in my app, only Student Users can write reviews
+        if prompt.no?("Are you sure you would like to delete to your profile?") # in my app, only Student Users can write reviews so I will not delete the reviews related to tutor user
             puts "glad to hear that you wanna stay here!"
             tutor_profile_screen
         else
