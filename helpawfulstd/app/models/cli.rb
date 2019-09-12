@@ -212,7 +212,8 @@ class CLI
            puts "Thank you for being a great student here! Hope to see you soon again!!"
         end
       end
-
+      
+      # For both Student and Tutor Users
       def go_to_exit
           puts "Byebye!"
           exit
