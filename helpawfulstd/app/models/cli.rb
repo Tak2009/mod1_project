@@ -60,7 +60,7 @@ class CLI
 
     # For both Student and Tutor users
     def logout 
-        puts "Goodby! See you soon!"
+        go_to_exit
     end
     
     # Student Login
@@ -126,12 +126,12 @@ class CLI
                 end  
         end
 
-        if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
-            s_search_tutor
-        else
-           puts "redirecting...."
-        end
-        student_profile_screen
+        # if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
+        #     s_search_tutor
+        # else
+        #    puts "redirecting...."
+        # end
+           student_profile_screen
     end
 
 
@@ -161,11 +161,11 @@ class CLI
             # tutor_list_with_conditions.each do |element_hash| p element_hash end
         end
 
-        if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
-            s_search_tutor
-        else
-            puts "redirecting...."
-        end
+        # if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
+        #    s_search_tutor
+        # else
+        # puts "redirecting...."
+        # end
         student_profile_screen
     end
 
@@ -211,6 +211,11 @@ class CLI
            @student_u.destroy
            puts "Thank you for being a great student here! Hope to see you soon again!!"
         end
+      end
+
+      def go_to_exit
+          puts "Byebye!"
+          exit
       end
     
 # ======================= From here, For Tutor User Type=====================================================================================
@@ -293,12 +298,13 @@ class CLI
                end
         end
 
-        if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
-            t_search_student
-        else
+        # if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
+        #      t_search_student
+        # else
+        #     puts "redirecting...."
             tutor_profile_screen
-        end
-        
+        # end
+            
     end
 
     def t_advanced_search_student
@@ -326,11 +332,13 @@ class CLI
             # student_list_with_conditions.each do |element_hash| p element_hash end
         end
 
-        if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
-            t_search_student
-        else
-            tutor_profile_screen
-        end
+        # if prompt.yes?("Wanna serch again? Otherwise going back to your profile screen!")
+        #    t_search_student
+        # else
+        #      puts "redirecting...."
+        tutor_profile_screen
+        # end
+            
     end
 
     
@@ -359,9 +367,7 @@ class CLI
     end
 
         
-        # def go_to_exit
-        #     puts "Byebye"
-        # end
+        
 end
 
 
