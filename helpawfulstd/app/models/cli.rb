@@ -112,7 +112,7 @@ class CLI
         if menu == "Advanced(based on rerviews)"
             s_advanced_search_tutor
         else
-            place = prompt.ask("Enter your location or anywhere you wanna check!")
+            place = prompt.ask("Enter your location or anywhere you wanna check!")   
             which_language = prompt.ask("Which language you wanna learn?")
          
             search_result_t = Tutor.all.where(location: place).where(language: which_language)
@@ -151,6 +151,7 @@ class CLI
         
         reviews_array = Review.all.where(language: what_language).where("rating_for_tutor >= #{tutor_rating}") # narrow down with #1 and #2
         tutor_id_only_array = reviews_array.map{|tutor_with_conditions| tutor_with_conditions.tutor_id}.uniq # reviews contains multiple reviews for 1 specific tutor user
+    # binding.pry   
         tutor_list_with_conditions = Tutor.all.where(id: tutor_id_only_array).where(location: place).where("experience >= #{experieced_or_not}") # need to sort with #3 and #4 by using Tutor table
      
         if tutor_list_with_conditions.length == 0
