@@ -88,21 +88,76 @@ class CLI
     def student_profile_screen
         prompt = TTY::Prompt.new
         puts "Welcome back, #{@student_u.s_profile_name}!"
-        menu = prompt.select("Please, select one of your options!", ["Update Profile", "Write Review", "Search Tutor", "Delete Profile","Log out"])
+        menu = prompt.select("Please, select one of your options!", ["Update Profile", "View Your Profile", "Show Reviews", "Write Review", "Search Tutor", "Delete Profile", "Log out"])
         
         if menu == "Update Profile"
             s_update_profile
+        elsif menu == "View Your Profile"
+            s_view_profile
+        elsif menu == "Show Reviews"
+            s_show_reviews
         elsif menu == "Write Review"
             s_write_review
         elsif menu == "Search Tutor"                  
             s_search_tutor
         elsif menu == "Delete Profile"
             s_delete_profile
-        else
-            logout
+        else menu == "Log out"
+            logout   
         end
     end
     
+    # Student U
+     def s_update_profile
+        prompt = TTY::Prompt.new
+        selection_excluding_system_generated = Student.column_names.select{|attr| attr != "id" && attr != "created_at" && attr != "updated_at"} 
+        attr_to_change = prompt.select("What information would you like to update?", selection_excluding_system_generated)
+        new_info = prompt.ask("Please enter the new #{attr_to_change}")
+        @student_u.update({attr_to_change => new_info})
+        puts "Updated!"
+        student_profile_screen
+     end
+
+     # Student R
+     def s_view_profile
+        puts "Your profile!"
+        # p @student_u
+        # p [@student_u].map{|t| {:name=> @student_u.s_profile_name, :your_area=> @student_u.location, :your_age=> @student_u.age, :your_target_language=> @student_u.wanna_learn, :email=> @student_u.contact_email, :pw=> @student_u.password}}
+        column_without = Student.all.column_names.select {|c| c != "id" && c != "created_at" && c != "updated_at"}
+        a = column_without.map {|t| @student_u[t]}
+        
+        sleep(5)
+        puts "redirecting...."
+        student_profile_screen
+    end
+
+    # Student R
+    def s_show_reviews
+        puts "All of your reviews are...."
+        p @student_u.reviews
+        sleep(5)
+        puts "redirecting...."
+        student_profile_screen
+    end
+
+    # Student W
+    def s_write_review
+        puts "Please answer follwing questions. You can write reviews for tutors in our platform. Make sure you treat people fairly and as nice as pissbile :)"
+        prompt = TTY::Prompt.new
+        level = prompt.ask("What is your knowledge level with 5 being highest?")
+    # Need to be cahnged to a list with email
+        email = prompt.ask("What is your tutor email? We need this for validation!") # filterling by name is too weak as there must be a lot of daves, toms for example. email is considered as unique enough
+        tutor_rating = prompt.ask("Give a rating please with 5 being highest")
+        something_to_say = prompt.ask("Any comment?")
+
+        t_id_by_email = Tutor.all.find_by(contact_email: email) # get the referece for the tutor
+
+        Review.create(student_id: @student_u.id, student_own_level: level, tutor_id: t_id_by_email.id, language: t_id_by_email.language, rating_for_tutor: tutor_rating, comment: something_to_say)
+        puts "Thank youfor your review. We always appreciate your feedback!!"
+        
+        student_profile_screen
+    end
+
     # Student R very simple looking into Tutor table. This search is NOT Review dependant
 # data input validation NOT implemented at all. Need  to work on if time allows
     def s_search_tutor
@@ -150,15 +205,20 @@ class CLI
         puts "Ok, thank you! hold on a sec pllease, We are serching for you!"
         
         reviews_array = Review.all.where(language: what_language).where("rating_for_tutor >= #{tutor_rating}") # narrow down with #1 and #2
-        tutor_id_only_array = reviews_array.map{|tutor_with_conditions| tutor_with_conditions.tutor_id}.uniq # reviews contains multiple reviews for 1 specific tutor user
-    # binding.pry   
-        tutor_list_with_conditions = Tutor.all.where(id: tutor_id_only_array).where(location: place).where("experience >= #{experieced_or_not}") # need to sort with #3 and #4 by using Tutor table
+        # tutor_id_only_array = reviews_array.map{|tutor_with_conditions| tutor_with_conditions.tutor_id}.uniq # reviews contains multiple reviews for 1 specific tutor user
+          
+        
+       
+        a = reviews_array.map{|t| t.tutor}.uniq
      
-        if tutor_list_with_conditions.length == 0
+        # tutor_list_with_conditions = Tutor.all.where(id: tutor_id_only_array).where(location: place).where("experience >= #{experieced_or_not}") # need to sort with #3 and #4 by using Tutor table
+        b = a.select {|t| t.location == place && t.experience >= experieced_or_not.to_i} 
+
+        if b.length == 0
             puts "No match :("
         else
             puts "Here is the result!"
-            puts tutor_list_with_conditions.map {|t| {:name => t.t_profile_name, :locartion => t.location, :language => t.language, :experience => t.experience, :hourly_rate => t.price, :email => t.contact_email}}
+            puts b.map {|t| {:name => t.t_profile_name, :location => t.location, :language => t.language, :experience => t.experience, :hourly_rate => t.price, :email => t.contact_email}}
             # tutor_list_with_conditions.each do |element_hash| p element_hash end
         end
 
@@ -170,35 +230,10 @@ class CLI
         student_profile_screen
     end
 
-    # Student W
-    def s_write_review
-        puts "Please answer follwing questions. You can write reviews for tutors in our platform. Make sure you treat people fairly and as nice as pissbile :)"
-        prompt = TTY::Prompt.new
-        level = prompt.ask("What is your knowledge level with 5 being highest?")
-    # Need to be cahnged to a list with email
-        email = prompt.ask("What is your tutor email? We need this for validation!") # filterling by name is too weak as there must be a lot of daves, toms for example. email is considered as unique enough
-        tutor_rating = prompt.ask("Give a rating please with 5 being highest")
-        something_to_say = prompt.ask("Any comment?")
-
-        t_id_by_email = Tutor.all.find_by(contact_email: email) # get the referece for the tutor
-
-        Review.create(student_id: @student_u.id, student_own_level: level, tutor_id: t_id_by_email.id, language: t_id_by_email.language, rating_for_tutor: tutor_rating, comment: something_to_say)
-        puts "Thank youfor your review. We always appreciate your feedback!!"
-        
-        student_profile_screen
-    end
+    
 
 
-    # Student U
-    def s_update_profile
-        prompt = TTY::Prompt.new
-        selection_excluding_system_generated = Student.column_names.select{|attr| attr != "id" && attr != "created_at" && attr != "updated_at"} 
-        attr_to_change = prompt.select("What information would you lkike to update?", selection_excluding_system_generated)
-        new_info = prompt.ask("Please enter the new #{attr_to_change}")
-        @student_u.update({attr_to_change => new_info})
-        puts "Updated!"
-        student_profile_screen
-    end
+    
 
     # Student D
     def s_delete_profile
