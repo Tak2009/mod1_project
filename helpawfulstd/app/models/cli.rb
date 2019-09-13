@@ -124,7 +124,7 @@ class CLI
         # p @student_u
         # p [@student_u].map{|t| {:name=> @student_u.s_profile_name, :your_area=> @student_u.location, :your_age=> @student_u.age, :your_target_language=> @student_u.wanna_learn, :email=> @student_u.contact_email, :pw=> @student_u.password}}
         column_without = Student.all.column_names.select {|c| c != "id" && c != "created_at" && c != "updated_at"}
-        a = column_without.map {|t| @student_u[t]}
+        puts column_without.map {|t| @student_u[t]}
         
         sleep(5)
         puts "redirecting...."
